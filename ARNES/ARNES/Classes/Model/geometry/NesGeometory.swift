@@ -295,10 +295,10 @@ class NesGeometory: PVNESEmulatorCoreDelegate {
                             let yBottom = Float(i + 1)
                             
                             vertices += [
-                                SCNVector3(xLeft, -yTop, 1.3),
-                                SCNVector3(xRight, -yTop, 1.3),
-                                SCNVector3(xLeft, -yBottom, 1.3),
-                                SCNVector3(xRight, -yBottom, 1.3),
+                                SCNVector3(xLeft, -yTop, 1.0),
+                                SCNVector3(xRight, -yTop, 1.0),
+                                SCNVector3(xLeft, -yBottom, 1.0),
+                                SCNVector3(xRight, -yBottom, 1.0),
                                 
                                 SCNVector3(xLeft, -yTop, 0.0),
                                 SCNVector3(xRight, -yTop, 0.0),
