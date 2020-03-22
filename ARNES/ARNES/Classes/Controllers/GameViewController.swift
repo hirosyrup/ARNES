@@ -24,7 +24,7 @@ class GameViewController: UIViewController, ARSCNViewDelegate, NesGeometoryDeleg
         
         nesGeometry.delegate = self
         nesNode.scale = SCNVector3(x: 0.005, y: 0.005, z: 0.05)
-        nesNode.position = SCNVector3(x: 0, y: 1.5, z: -2)
+        nesNode.position = SCNVector3(x: 0, y: 1.0, z: -1.0)
         
         startRunning()
     }
