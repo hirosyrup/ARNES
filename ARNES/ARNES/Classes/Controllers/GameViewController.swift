@@ -39,6 +39,13 @@ class GameViewController: UIViewController, ARSCNViewDelegate, NesGeometoryDeleg
         configuration.isLightEstimationEnabled = true
         
         sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+        
+        let coachingOverlay = ARCoachingOverlayView()
+        coachingOverlay.activatesAutomatically = true
+        coachingOverlay.goal = .horizontalPlane
+        coachingOverlay.session = sceneView.session
+        coachingOverlay.frame = sceneView.bounds
+        sceneView.addSubview(coachingOverlay)
     }
     
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
