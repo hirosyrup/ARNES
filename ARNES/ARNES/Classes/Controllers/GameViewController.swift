@@ -49,11 +49,17 @@ class GameViewController: UIViewController, ARSCNViewDelegate, NesGeometoryDeleg
         sceneView.addSubview(coachingOverlay)
     }
     
-    private func addNesNode(parentNode: SCNNode) {
+    private func addNodes(parentNode: SCNNode) {
         parentNode.addChildNode(nesNode)
         nesNode.position = SCNVector3(x: -1.0, y: 0.6, z: -0.7)
         let eulerAngles = parentNode.eulerAngles
         nesNode.eulerAngles = SCNVector3(eulerAngles.x, -eulerAngles.y, eulerAngles.z)
+        
+        let lightNode = SCNNode()
+        lightNode.light = SCNLight()
+        lightNode.light!.type = .omni
+        lightNode.position = SCNVector3(x: 0, y: 1.0, z: 0.0)
+        parentNode.addChildNode(lightNode)
     }
     
     private func retainAnchorNodePostionAndAngles(parentNode: SCNNode) {
@@ -85,7 +91,7 @@ class GameViewController: UIViewController, ARSCNViewDelegate, NesGeometoryDeleg
             node.eulerAngles = stableAnchorNodeAngles
             DispatchQueue.main.async {
                 if !node.childNodes.contains(self.nesNode) {
-                    self.addNesNode(parentNode: node)
+                    self.addNodes(parentNode: node)
                     self.nesGeometry.start()
                 }
             }
