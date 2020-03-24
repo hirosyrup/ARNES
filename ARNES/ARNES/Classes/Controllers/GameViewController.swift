@@ -15,6 +15,9 @@ class GameViewController: UIViewController, ARSCNViewDelegate, NesGeometoryDeleg
     @IBOutlet weak var sceneView: ARSCNView!
     private let nesNode = SCNNode()
     private var nesGeometry = NesGeometory()
+    private var stableCount = 0
+    private var stableAnchorNodePosition = SCNVector3Zero
+    private var stableAnchorNodeAngles = SCNVector3Zero
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,8 +26,6 @@ class GameViewController: UIViewController, ARSCNViewDelegate, NesGeometoryDeleg
         sceneView.scene = SCNScene()
         
         nesGeometry.delegate = self
-        nesNode.scale = SCNVector3(x: 0.005, y: 0.005, z: 0.05)
-        nesNode.position = SCNVector3(x: 0, y: 1.0, z: -1.0)
         
         startRunning()
     }
@@ -48,11 +49,51 @@ class GameViewController: UIViewController, ARSCNViewDelegate, NesGeometoryDeleg
         sceneView.addSubview(coachingOverlay)
     }
     
-    func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-        if !node.childNodes.contains(nesNode) {
-            node.addChildNode(nesNode)
-            nesGeometry.start()
+    private func addNesNode(parentNode: SCNNode) {
+        parentNode.addChildNode(nesNode)
+        nesNode.position = SCNVector3(x: -1.0, y: 0.6, z: -0.7)
+        let eulerAngles = parentNode.eulerAngles
+        nesNode.eulerAngles = SCNVector3(eulerAngles.x, -eulerAngles.y, eulerAngles.z)
+    }
+    
+    private func retainAnchorNodePostionAndAngles(parentNode: SCNNode) {
+        if !isStableAnchor() {
+            let parentPosition = parentNode.position
+            let parentAngles = parentNode.eulerAngles
+            // positionに関してはyは微妙に暴れるので見ない。angleに関してはy以外変わらないのでyのみ比較
+            if stableAnchorNodePosition.x == parentPosition.x &&
+                stableAnchorNodePosition.z == parentPosition.z &&
+                stableAnchorNodeAngles.y == parentAngles.y {
+                stableCount += 1
+            } else {
+                stableCount = 0
+            }
+            stableAnchorNodePosition = parentPosition
+            stableAnchorNodeAngles = parentAngles
         }
+    }
+    
+    private func isStableAnchor() -> Bool {
+        return stableCount >= 10
+    }
+    
+    func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+    }
+    
+    func renderer(_ renderer: SCNSceneRenderer, willUpdate node: SCNNode, for anchor: ARAnchor) {
+        if isStableAnchor() {
+            node.eulerAngles = stableAnchorNodeAngles
+            DispatchQueue.main.async {
+                if !node.childNodes.contains(self.nesNode) {
+                    self.addNesNode(parentNode: node)
+                    self.nesGeometry.start()
+                }
+            }
+        }
+    }
+    
+    func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
+        self.retainAnchorNodePostionAndAngles(parentNode: node)
     }
     
     func renderer(_ renderer: SCNSceneRenderer, didRemove node: SCNNode, for anchor: ARAnchor) {

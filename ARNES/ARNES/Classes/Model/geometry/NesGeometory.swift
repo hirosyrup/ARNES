@@ -42,11 +42,15 @@ class NesGeometory: PVNESEmulatorCoreDelegate {
     }
     
     func start() {
-        core.startEmulation()
+        if core.isEmulationPaused() {
+            core.startEmulation()
+        }
     }
     
     func pause() {
-        core.setPauseEmulation(true)
+        if !core.isEmulationPaused() {
+            core.setPauseEmulation(true)
+        }
     }
     
     private func setCurrentRom() {
@@ -178,6 +182,9 @@ class NesGeometory: PVNESEmulatorCoreDelegate {
             return
         }
         DispatchQueue.main.async {
+            let xyScale: Float = 0.003
+            let zScale: Float = 0.03
+            let xBlockWidthCoef: Float = 1.3
             var current: UInt32 = 0
             var next: UInt32 = 0
             var maxCount: UInt32 = 1
@@ -208,11 +215,13 @@ class NesGeometory: PVNESEmulatorCoreDelegate {
             var indices = [Int32]()
             var colors = [SCNVector3]()
             
+            let bgWidth = Float(width) * xBlockWidthCoef * xyScale
+            let bHeight = Float(height) * xyScale
             vertices += [
                 SCNVector3(0.0, 0.0, 0.0),
-                SCNVector3(332.8, 0.0, 0.0),
-                SCNVector3(0.0, -240.0, 0.0),
-                SCNVector3(332.8, -240.0, 0.0),
+                SCNVector3(bgWidth, 0.0, 0.0),
+                SCNVector3(0.0, -bHeight, 0.0),
+                SCNVector3(bgWidth, -bHeight, 0.0),
             ]
             
             indices += [
@@ -289,16 +298,16 @@ class NesGeometory: PVNESEmulatorCoreDelegate {
                                 pos5, pos6, pos7,
                             ]
                             
-                            let xLeft = Float(xOffset) * 1.3
-                            let xRight = Float(xOffset + num) * 1.3
-                            let yTop = Float(i)
-                            let yBottom = Float(i + 1)
+                            let xLeft = Float(xOffset) * xBlockWidthCoef * xyScale
+                            let xRight = Float(xOffset + num) * xBlockWidthCoef * xyScale
+                            let yTop = Float(i) * xyScale
+                            let yBottom = Float(i + 1) * xyScale
                             
                             vertices += [
-                                SCNVector3(xLeft, -yTop, 1.0),
-                                SCNVector3(xRight, -yTop, 1.0),
-                                SCNVector3(xLeft, -yBottom, 1.0),
-                                SCNVector3(xRight, -yBottom, 1.0),
+                                SCNVector3(xLeft, -yTop, zScale),
+                                SCNVector3(xRight, -yTop, zScale),
+                                SCNVector3(xLeft, -yBottom, zScale),
+                                SCNVector3(xRight, -yBottom, zScale),
                                 
                                 SCNVector3(xLeft, -yTop, 0.0),
                                 SCNVector3(xRight, -yTop, 0.0),
