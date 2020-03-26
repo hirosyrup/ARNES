@@ -10,10 +10,11 @@ import UIKit
 import SceneKit
 import ARKit
 
-class GameViewController: UIViewController, ARSCNViewDelegate, NesGeometoryDelegate {
+class GameViewController: UIViewController, ARSCNViewDelegate, EmulatorDelegate {
 
     @IBOutlet weak var sceneView: ARSCNView!
     private let nesNode = SCNNode()
+    private let emulator = Emulator()
     private var nesGeometry = NesGeometory()
     private var stableCount = 0
     private var stableAnchorNodePosition = SCNVector3Zero
@@ -25,7 +26,7 @@ class GameViewController: UIViewController, ARSCNViewDelegate, NesGeometoryDeleg
         sceneView.delegate = self
         sceneView.scene = SCNScene()
         
-        nesGeometry.delegate = self
+        emulator.delegate = self
         
         startRunning()
     }
@@ -86,7 +87,7 @@ class GameViewController: UIViewController, ARSCNViewDelegate, NesGeometoryDeleg
             DispatchQueue.main.async {
                 if !node.childNodes.contains(self.nesNode) {
                     self.addNodes(parentNode: node)
-                    self.nesGeometry.start()
+                    self.emulator.start()
                 }
             }
         }
@@ -98,11 +99,13 @@ class GameViewController: UIViewController, ARSCNViewDelegate, NesGeometoryDeleg
     
     func renderer(_ renderer: SCNSceneRenderer, didRemove node: SCNNode, for anchor: ARAnchor) {
         nesNode.removeFromParentNode()
-        nesGeometry.pause()
+        emulator.pause()
     }
     
-    func updateGeometory(geometory: SCNGeometry) {
-        nesNode.geometry = geometory
+    func updateBuffer(_ buffer: UnsafeMutablePointer<UInt32>!, width: Int, height: Int) {
+        DispatchQueue.main.async {
+            self.nesNode.geometry = self.nesGeometry.createGeometory(buffer, width: width, height: height)
+        }
     }
     
     @IBAction func pushBgButton(_ sender: Any) {

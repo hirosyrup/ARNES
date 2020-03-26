@@ -18,6 +18,7 @@
 		FB3852E024279C1F0003B357 /* libPVSupport.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FB3852DF24279C1F0003B357 /* libPVSupport.a */; };
 		FB3852E424279F420003B357 /* NesGeometory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB3852E324279F420003B357 /* NesGeometory.swift */; };
 		FB3852E72427A26B0003B357 /* demo.nes in Resources */ = {isa = PBXBuildFile; fileRef = FB3852E62427A26B0003B357 /* demo.nes */; };
+		FB3852EA242CF4440003B357 /* Emulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB3852E9242CF4440003B357 /* Emulator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +36,7 @@
 		FB3852E324279F420003B357 /* NesGeometory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NesGeometory.swift; sourceTree = "<group>"; };
 		FB3852E524279F8A0003B357 /* ARNES-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ARNES-Bridging-Header.h"; sourceTree = "<group>"; };
 		FB3852E62427A26B0003B357 /* demo.nes */ = {isa = PBXFileReference; lastKnownFileType = file; path = demo.nes; sourceTree = "<group>"; };
+		FB3852E9242CF4440003B357 /* Emulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Emulator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +117,7 @@
 		FB3852E124279F420003B357 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				FB3852E8242CF42A0003B357 /* core */,
 				FB3852E224279F420003B357 /* geometry */,
 			);
 			path = Model;
@@ -126,6 +129,14 @@
 				FB3852E324279F420003B357 /* NesGeometory.swift */,
 			);
 			path = geometry;
+			sourceTree = "<group>";
+		};
+		FB3852E8242CF42A0003B357 /* core */ = {
+			isa = PBXGroup;
+			children = (
+				FB3852E9242CF4440003B357 /* Emulator.swift */,
+			);
+			path = core;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -202,6 +213,7 @@
 			files = (
 				FB0204B32292E90D00AEA2D6 /* GameViewController.swift in Sources */,
 				FB3852E424279F420003B357 /* NesGeometory.swift in Sources */,
+				FB3852EA242CF4440003B357 /* Emulator.swift in Sources */,
 				FB0204AF2292E90D00AEA2D6 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
