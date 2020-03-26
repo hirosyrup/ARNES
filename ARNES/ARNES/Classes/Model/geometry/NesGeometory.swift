@@ -17,6 +17,7 @@ protocol NesGeometoryDelegate: class {
 class NesGeometory: PVNESEmulatorCoreDelegate {
     
     weak var delegate: NesGeometoryDelegate?
+    var showBg: Bool = true
     private var core: PVNESEmulatorCore
     private var audio: OEGameAudio!
     private var currentController: GCController?
@@ -217,26 +218,28 @@ class NesGeometory: PVNESEmulatorCoreDelegate {
             
             let bgWidth = Float(width) * xBlockWidthCoef * xyScale
             let bHeight = Float(height) * xyScale
-            vertices += [
-                SCNVector3(0.0, 0.0, 0.0),
-                SCNVector3(bgWidth, 0.0, 0.0),
-                SCNVector3(0.0, -bHeight, 0.0),
-                SCNVector3(bgWidth, -bHeight, 0.0),
-            ]
-            
-            indices += [
-                // 手前
-                0, 2, 1,
-                1, 2, 3,
-            ]
-            
-            let color = self.convertColor(color: maxColor)
-            colors += [
-                color,
-                color,
-                color,
-                color,
-            ]
+            if self.showBg {
+                vertices += [
+                    SCNVector3(0.0, 0.0, 0.0),
+                    SCNVector3(bgWidth, 0.0, 0.0),
+                    SCNVector3(0.0, -bHeight, 0.0),
+                    SCNVector3(bgWidth, -bHeight, 0.0),
+                ]
+                
+                indices += [
+                    // 手前
+                    0, 2, 1,
+                    1, 2, 3,
+                ]
+                
+                let color = self.convertColor(color: maxColor)
+                colors += [
+                    color,
+                    color,
+                    color,
+                    color,
+                ]
+            }
             
             var currentColor: UInt32 = 0
             var colorTmp: UInt32 = 0
