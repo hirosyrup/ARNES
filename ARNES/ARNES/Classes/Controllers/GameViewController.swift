@@ -111,4 +111,76 @@ class GameViewController: UIViewController, ARSCNViewDelegate, EmulatorDelegate 
     @IBAction func pushBgButton(_ sender: Any) {
         nesGeometry.showBg = !nesGeometry.showBg
     }
+    
+    @IBAction func pushButton(_ sender: UIButton) {
+        let player = 0
+        switch sender.tag {
+        case 0:
+            emulator.pushButton(buttonType: .left, forPlayer: player)
+            emulator.pushButton(buttonType: .up, forPlayer: player)
+        case 1:
+            emulator.pushButton(buttonType: .up, forPlayer: player)
+        case 2:
+            emulator.pushButton(buttonType: .up, forPlayer: player)
+            emulator.pushButton(buttonType: .right, forPlayer: player)
+        case 3:
+            emulator.pushButton(buttonType: .right, forPlayer: player)
+        case 4:
+            emulator.pushButton(buttonType: .right, forPlayer: player)
+            emulator.pushButton(buttonType: .down, forPlayer: player)
+        case 5:
+            emulator.pushButton(buttonType: .down, forPlayer: player)
+        case 6:
+            emulator.pushButton(buttonType: .down, forPlayer: player)
+            emulator.pushButton(buttonType: .left, forPlayer: player)
+        case 7:
+            emulator.pushButton(buttonType: .left, forPlayer: player)
+        case 8:
+            emulator.pushButton(buttonType: .select, forPlayer: player)
+        case 9:
+            emulator.pushButton(buttonType: .start, forPlayer: player)
+        case 10:
+            emulator.pushButton(buttonType: .B, forPlayer: player)
+        case 11:
+            emulator.pushButton(buttonType: .A, forPlayer: player)
+        default:
+            return
+        }
+    }
+    
+    @IBAction func releaseButton(_ sender: UIButton) {
+        let player = 0
+        switch sender.tag {
+        case 0:
+            emulator.releaseButton(buttonType: .left, forPlayer: player)
+            emulator.releaseButton(buttonType: .up, forPlayer: player)
+        case 1:
+            emulator.releaseButton(buttonType: .up, forPlayer: player)
+        case 2:
+            emulator.releaseButton(buttonType: .up, forPlayer: player)
+            emulator.releaseButton(buttonType: .right, forPlayer: player)
+        case 3:
+            emulator.releaseButton(buttonType: .right, forPlayer: player)
+        case 4:
+            emulator.releaseButton(buttonType: .right, forPlayer: player)
+            emulator.releaseButton(buttonType: .down, forPlayer: player)
+        case 5:
+            emulator.releaseButton(buttonType: .down, forPlayer: player)
+        case 6:
+            emulator.releaseButton(buttonType: .down, forPlayer: player)
+            emulator.releaseButton(buttonType: .left, forPlayer: player)
+        case 7:
+            emulator.releaseButton(buttonType: .left, forPlayer: player)
+        case 8:
+            emulator.releaseButton(buttonType: .select, forPlayer: player)
+        case 9:
+            emulator.releaseButton(buttonType: .start, forPlayer: player)
+        case 10:
+            emulator.releaseButton(buttonType: .B, forPlayer: player)
+        case 11:
+            emulator.releaseButton(buttonType: .A, forPlayer: player)
+        default:
+            return
+        }
+    }
 }

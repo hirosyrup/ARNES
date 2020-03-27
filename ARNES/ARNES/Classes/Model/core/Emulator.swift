@@ -23,18 +23,24 @@ class Emulator: PVNESEmulatorCoreDelegate {
     init() {
         core = PVNESEmulatorCore()
         setupCore()
+        core.startEmulation()
+        pause()
     }
     
     func start() {
-        if core.isEmulationPaused() {
-            core.startEmulation()
-        }
+        core.setPauseEmulation(false)
     }
     
     func pause() {
-        if !core.isEmulationPaused() {
-            core.setPauseEmulation(true)
-        }
+        core.setPauseEmulation(true)
+    }
+    
+    func pushButton(buttonType: PVNESButton, forPlayer: Int) {
+        core.push(buttonType, forPlayer: forPlayer)
+    }
+    
+    func releaseButton(buttonType: PVNESButton, forPlayer: Int) {
+        core.release(buttonType, forPlayer: forPlayer)
     }
     
     private func setCurrentRom() {
