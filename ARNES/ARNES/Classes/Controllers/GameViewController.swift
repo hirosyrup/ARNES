@@ -49,13 +49,12 @@ class GameViewController: UIViewController, ARSCNViewDelegate, EmulatorDelegate 
     }
     
     private func addNesNode(hitTestPosition: SCNVector3) {
-        guard let planeNode = planeGeometryNode else {
-            return
-        }
         sceneView.scene.rootNode.addChildNode(nesNode)
         nesNode.position = SCNVector3(x: hitTestPosition.x, y: hitTestPosition.y + 0.5, z: hitTestPosition.z)
-        let eulerAngles = planeNode.eulerAngles
-        nesNode.eulerAngles = SCNVector3(eulerAngles.x, -eulerAngles.y, eulerAngles.z)
+        if let camera = sceneView.pointOfView {
+            let eulerAngles = camera.eulerAngles
+            nesNode.eulerAngles = SCNVector3(0.0, eulerAngles.y, 0.0)
+        }
     }
     
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
