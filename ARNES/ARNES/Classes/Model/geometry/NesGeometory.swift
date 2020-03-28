@@ -13,8 +13,8 @@ class NesGeometory {
     var showBg: Bool = true
     
     func createGeometory(_ buffer: UnsafeMutablePointer<UInt32>!, width: Int, height: Int) -> SCNGeometry {
-        let xyScale: Float = 0.003
-        let zScale: Float = 0.03
+        let xyScale: Float = 0.002
+        let zScale: Float = 0.02
         let xBlockWidthCoef: Float = 1.3
         var current: UInt32 = 0
         var next: UInt32 = 0
@@ -48,12 +48,13 @@ class NesGeometory {
         
         let bgWidth = Float(width) * xBlockWidthCoef * xyScale
         let bHeight = Float(height) * xyScale
+        let halfWidth = bgWidth / 2.0
         if self.showBg {
             vertices += [
-                SCNVector3(0.0, 0.0, 0.0),
-                SCNVector3(bgWidth, 0.0, 0.0),
-                SCNVector3(0.0, -bHeight, 0.0),
-                SCNVector3(bgWidth, -bHeight, 0.0),
+                SCNVector3(-halfWidth, 0.0, 0.0),
+                SCNVector3(bgWidth - halfWidth, 0.0, 0.0),
+                SCNVector3(-halfWidth, -bHeight, 0.0),
+                SCNVector3(bgWidth - halfWidth, -bHeight, 0.0),
             ]
             
             indices += [
@@ -131,8 +132,8 @@ class NesGeometory {
                             pos5, pos6, pos7,
                         ]
                         
-                        let xLeft = Float(xOffset) * xBlockWidthCoef * xyScale
-                        let xRight = Float(xOffset + num) * xBlockWidthCoef * xyScale
+                        let xLeft = Float(xOffset) * xBlockWidthCoef * xyScale - halfWidth
+                        let xRight = Float(xOffset + num) * xBlockWidthCoef * xyScale - halfWidth
                         let yTop = Float(i) * xyScale
                         let yBottom = Float(i + 1) * xyScale
                         

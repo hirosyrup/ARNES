@@ -267,6 +267,17 @@
                                     <constraint firstItem="09S-lF-3WL" firstAttribute="top" secondItem="NHO-Dc-w4R" secondAttribute="top" id="xt6-IB-YAI"/>
                                 </constraints>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mej-0b-fYs">
+                                <rect key="frame" x="730" y="20" width="40" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="8OO-yI-puy"/>
+                                    <constraint firstAttribute="width" constant="40" id="Kc9-7i-xQ7"/>
+                                </constraints>
+                                <state key="normal" title="Show"/>
+                                <connections>
+                                    <action selector="pushShow:" destination="BV1-FR-VrT" eventType="touchUpInside" id="fgk-pB-haB"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
@@ -276,11 +287,13 @@
                             <constraint firstItem="VYK-tJ-HM1" firstAttribute="leading" secondItem="3Kz-or-04U" secondAttribute="leading" constant="32" id="Hfs-SO-hAb"/>
                             <constraint firstItem="h3r-iB-MMH" firstAttribute="top" secondItem="3Kz-or-04U" secondAttribute="top" id="Imd-CC-F8s"/>
                             <constraint firstItem="h3r-iB-MMH" firstAttribute="leading" secondItem="E96-VW-JdN" secondAttribute="leading" id="MbT-10-XPL"/>
+                            <constraint firstItem="Mej-0b-fYs" firstAttribute="top" secondItem="biV-ZJ-iSs" secondAttribute="top" id="VYx-Bn-PSv"/>
                             <constraint firstItem="NHO-Dc-w4R" firstAttribute="centerX" secondItem="E96-VW-JdN" secondAttribute="centerX" id="WG9-AF-vnm"/>
                             <constraint firstItem="NHO-Dc-w4R" firstAttribute="bottom" secondItem="3Kz-or-04U" secondAttribute="bottom" id="bLH-Ig-tqf"/>
                             <constraint firstAttribute="trailing" secondItem="h3r-iB-MMH" secondAttribute="trailing" id="ePG-Ip-fCt"/>
                             <constraint firstAttribute="bottom" secondItem="h3r-iB-MMH" secondAttribute="bottom" id="gZc-UU-IYH"/>
                             <constraint firstItem="3Kz-or-04U" firstAttribute="bottom" secondItem="hZq-4P-1ag" secondAttribute="bottom" constant="25" id="hCp-NR-8vG"/>
+                            <constraint firstItem="biV-ZJ-iSs" firstAttribute="leading" secondItem="Mej-0b-fYs" secondAttribute="trailing" constant="22" id="xWX-Lp-v4u"/>
                             <constraint firstItem="3Kz-or-04U" firstAttribute="trailing" secondItem="biV-ZJ-iSs" secondAttribute="trailing" constant="20" id="zIm-qq-5UT"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="3Kz-or-04U"/>

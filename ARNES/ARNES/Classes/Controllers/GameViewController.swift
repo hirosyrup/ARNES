@@ -16,9 +16,7 @@ class GameViewController: UIViewController, ARSCNViewDelegate, EmulatorDelegate 
     private let nesNode = SCNNode()
     private let emulator = Emulator()
     private var nesGeometry = NesGeometory()
-    private var stableCount = 0
-    private var stableAnchorNodePosition = SCNVector3Zero
-    private var stableAnchorNodeAngles = SCNVector3Zero
+    private var planeGeometryNode: SCNNode?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,61 +48,43 @@ class GameViewController: UIViewController, ARSCNViewDelegate, EmulatorDelegate 
         sceneView.addSubview(coachingOverlay)
     }
     
-    private func addNodes(parentNode: SCNNode) {
-        parentNode.addChildNode(nesNode)
-        nesNode.position = SCNVector3(x: -1.0, y: 0.6, z: -0.7)
-        let eulerAngles = parentNode.eulerAngles
+    private func addNesNode(hitTestPosition: SCNVector3) {
+        guard let planeNode = planeGeometryNode else {
+            return
+        }
+        sceneView.scene.rootNode.addChildNode(nesNode)
+        nesNode.position = SCNVector3(x: hitTestPosition.x, y: hitTestPosition.y + 0.5, z: hitTestPosition.z)
+        let eulerAngles = planeNode.eulerAngles
         nesNode.eulerAngles = SCNVector3(eulerAngles.x, -eulerAngles.y, eulerAngles.z)
     }
     
-    private func retainAnchorNodePostionAndAngles(parentNode: SCNNode) {
-        if !isStableAnchor() {
-            let parentPosition = parentNode.position
-            let parentAngles = parentNode.eulerAngles
-            // positionに関してはyは微妙に暴れるので見ない。angleに関してはy以外変わらないのでyのみ比較
-            if stableAnchorNodePosition.x == parentPosition.x &&
-                stableAnchorNodePosition.z == parentPosition.z &&
-                stableAnchorNodeAngles.y == parentAngles.y {
-                stableCount += 1
-            } else {
-                stableCount = 0
-            }
-            stableAnchorNodePosition = parentPosition
-            stableAnchorNodeAngles = parentAngles
-        }
-    }
-    
-    private func isStableAnchor() -> Bool {
-        return stableCount >= 10
-    }
-    
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-    }
-    
-    func renderer(_ renderer: SCNSceneRenderer, willUpdate node: SCNNode, for anchor: ARAnchor) {
-        if isStableAnchor() {
-            node.eulerAngles = stableAnchorNodeAngles
-            DispatchQueue.main.async {
-                if !node.childNodes.contains(self.nesNode) {
-                    self.addNodes(parentNode: node)
-                    self.emulator.start()
-                }
-            }
+        guard let planeGeoemtry = ARSCNPlaneGeometry(device: sceneView.device!) else { fatalError() }
+        if planeGeometryNode == nil {
+            planeGeoemtry.materials.first!.diffuse.contents = UIColor.clear
+            planeGeometryNode = SCNNode(geometry: planeGeoemtry)
+            node.addChildNode(planeGeometryNode!)
         }
     }
     
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
-        self.retainAnchorNodePostionAndAngles(parentNode: node)
-    }
-    
-    func renderer(_ renderer: SCNSceneRenderer, didRemove node: SCNNode, for anchor: ARAnchor) {
-        nesNode.removeFromParentNode()
-        emulator.pause()
+        guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
+        guard let planeGeometry = node.childNodes.filter({$0.geometry is ARSCNPlaneGeometry}).first?.geometry as? ARSCNPlaneGeometry else { return }
+        planeGeometry.update(from: planeAnchor.geometry)
     }
     
     func updateBuffer(_ buffer: UnsafeMutablePointer<UInt32>!, width: Int, height: Int) {
         DispatchQueue.main.async {
             self.nesNode.geometry = self.nesGeometry.createGeometory(buffer, width: width, height: height)
+        }
+    }
+    
+    @IBAction func pushShow(_ sender: UIButton) {
+        let results = sceneView.hitTest(view.center, types: .existingPlaneUsingGeometry)
+        if let result = results.first {
+            let transform = result.worldTransform.columns.3
+            addNesNode(hitTestPosition: SCNVector3(transform.x, transform.y, transform.z))
+            emulator.start()
         }
     }
     
